@@ -1,0 +1,50 @@
+CREATE OR REPLACE PROCEDURE INSERIR_FUNCIONARIOS AS
+  v_id_func NUMBER;
+BEGIN
+  FOR i IN 1..1000000 LOOP
+    v_id_func := "SEQ_ID_FUNC".NEXTVAL; -- Use a sequência existente para gerar IDs únicos
+
+    -- Verifique se o ID gerado pela sequência já existe na tabela
+    WHILE TRUE LOOP
+      BEGIN
+        INSERT INTO "T_RHSTU_FUNCIONARIO" (
+          "ID_FUNC",
+          "ID_SUPERIOR",
+          "NM_FUNC",
+          "DS_CARGO",
+          "DT_NASCIMENTO",
+          "VL_SALARIO",
+          "NR_RG",
+          "NR_CPF",
+          "ST_FUNC",
+          "DT_CADASTRO",
+          "NM_USUARIO"
+        ) VALUES (
+          v_id_func,
+          NULL,
+          'Funcionário ' || v_id_func,
+          'Cargo ' || v_id_func,
+          TO_DATE('01-JAN-1990', 'DD-MON-YYYY') + (i - 1),
+          5000.00 + (i - 1),
+          'RG' || LPAD(i, 10, '0'),
+          10000000000 + i,
+          CASE WHEN MOD(i, 2) = 0 THEN 'A' ELSE 'I' END,
+          SYSDATE,
+          'Usuário ' || i
+        );
+        COMMIT;
+        EXIT;
+      EXCEPTION
+        WHEN OTHERS THEN
+          v_id_func := "SEQ_ID_FUNC".NEXTVAL; -- Gere um novo ID se o anterior já existe
+      END;
+    END LOOP;
+  END LOOP;
+END INSERIR_FUNCIONARIOS;
+/
+
+
+BEGIN
+  INSERIR_FUNCIONARIOS;
+END;
+/
