@@ -1,0 +1,10 @@
+# 1MILHASQL
+
+ETL EXTRACT TRANSFORM LOAD
+
+FERRAMENTAS
+Alterix
+Pentaho PDI
+Talend
+Apache Hop
+
